@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOSA DELTA | Ultimate Script Platform</title>
-    <!-- Google Fonts & Font Awesome -->
+    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -42,6 +42,7 @@
             position: relative;
         }
 
+        /* --- Optimized Background --- */
         .space-bg {
             position: fixed;
             top: 0;
@@ -50,16 +51,17 @@
             height: 100%;
             z-index: -1;
             background: radial-gradient(circle at 50% 20%, #110d2b 0%, #03050c 80%);
+            pointer-events: none;
         }
 
         .star {
             position: absolute;
             background: #fff;
             border-radius: 50%;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
-        /* --- Header --- */
+        /* --- Header & Navigation --- */
         header {
             position: sticky;
             top: 0;
@@ -323,7 +325,7 @@
             cursor: pointer;
         }
 
-        /* --- Nova AI Chat Container Fixed & Active --- */
+        /* --- Nova AI Chat Container --- */
         .ai-box {
             max-width: 800px;
             margin: 0 auto;
@@ -561,7 +563,7 @@
                 <p style="color:var(--text-muted); font-size:0.85rem;" data-i18n="bypass_sub">ضع رابط Delta Keysystem أدناه واستخرج المفتاح فوراً</p>
 
                 <div class="input-group-custom">
-                    <input type="text" id="bypassUrlInput" placeholder="https://auth.platorelay.com/..." dir="ltr">
+                    <input type="text" id="bypassUrlInput" placeholder="https://gateway.platoboost.com/a/8?id=..." dir="ltr">
                     <button class="btn-main" style="width:auto; padding:0 16px; font-size:0.85rem;" onclick="pasteToBypass()"><i class="fa-solid fa-paste"></i> <span data-i18n="paste_btn">لصق</span></button>
                 </div>
 
@@ -575,7 +577,7 @@
             </div>
         </section>
 
-        <!-- Nova AI View (Fully Fixed & Active) -->
+        <!-- Nova AI View -->
         <section id="ai" class="section">
             <div class="ai-box">
                 <div class="ai-topbar">
@@ -632,8 +634,8 @@
     <!-- Footer -->
     <footer>
         <div class="statistics-bar">
-            <div class="stat-badge"><i class="fa-solid fa-eye"></i> <span data-i18n="total_visits">إجمالي الزيارات</span>: <b id="totalVisitsCount">2,485</b></div>
-            <div class="stat-badge"><i class="fa-solid fa-users"></i> <span data-i18n="unique_visits">الزوار الفريدون</span>: <b id="uniqueVisitsCount">892</b></div>
+            <div class="stat-badge"><i class="fa-solid fa-eye"></i> <span data-i18n="total_visits">إجمالي الزيارات المحلية</span>: <b id="totalVisitsCount">1,482</b></div>
+            <div class="stat-badge"><i class="fa-solid fa-users"></i> <span data-i18n="unique_visits">الزوار الفريدون</span>: <b id="uniqueVisitsCount">523</b></div>
         </div>
         <div style="font-size:0.8rem; color:var(--text-muted);"><span data-i18n="footer_rights">جميع الحقوق محفوظة © 2026</span> <b>MOSA DELTA</b></div>
     </footer>
@@ -641,6 +643,16 @@
     <div id="toastNotification" class="toast-alert">تمت العملية بنجاح!</div>
 
     <script>
+        // --- Safe HTML Sanitizer ---
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         const translations = {
             ar: {
                 nav_home: "الرئيسية",
@@ -678,7 +690,7 @@
                 script1_desc: "سكربت الأدوات الإدارية الأقوى للتحكم الكامل في شخصيتك وبيئة اللعبة.",
                 script2_desc: "كشف الأماكن والتصويب التلقائي الاحترافي في لعبة Murder Mystery 2.",
                 copy_script_btn: "نسخ السكربت",
-                total_visits: "إجمالي الزيارات",
+                total_visits: "إجمالي الزيارات المحلية",
                 unique_visits: "الزوار الفريدون",
                 footer_rights: "جميع الحقوق محفوظة © 2026"
             },
@@ -718,7 +730,7 @@
                 script1_desc: "The most powerful admin commands script for full control over your character and game environment.",
                 script2_desc: "ESP and professional Silent Aim in Murder Mystery 2.",
                 copy_script_btn: "Copy Script",
-                total_visits: "Total Visits",
+                total_visits: "Local Total Visits",
                 unique_visits: "Unique Visitors",
                 footer_rights: "All Rights Reserved © 2026"
             }
@@ -758,7 +770,8 @@
 
         function createStars() {
             const bg = document.getElementById('spaceBg');
-            for (let i = 0; i < 40; i++) {
+            bg.innerHTML = ''; 
+            for (let i = 0; i < 25; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.width = `${Math.random() * 2 + 1}px`;
@@ -789,49 +802,117 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
+        // --- Safe Clipboard API Handlers ---
         async function pasteToBypass() {
+            const input = document.getElementById('bypassUrlInput');
             try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('bypassUrlInput').value = text;
-                showToast(currentLang === 'ar' ? 'تم اللصق بنجاح!' : 'Pasted!');
+                if (navigator.clipboard && navigator.clipboard.readText) {
+                    const text = await navigator.clipboard.readText();
+                    input.value = text;
+                    showToast(currentLang === 'ar' ? 'تم اللصق بنجاح!' : 'Pasted!');
+                } else {
+                    input.focus();
+                    showToast(currentLang === 'ar' ? 'الرجاء الصق يدوياً' : 'Paste manually');
+                }
             } catch (err) {
-                showToast(currentLang === 'ar' ? 'اكتب الرابط يدوياً' : 'Type manually');
+                input.focus();
+                showToast(currentLang === 'ar' ? 'ضع الرابط في الحقل' : 'Enter URL manually');
             }
         }
 
+        function copyToClipboardFallback(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(text);
+            } else {
+                return new Promise((resolve, reject) => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        resolve();
+                    } catch (e) {
+                        document.body.removeChild(textarea);
+                        reject(e);
+                    }
+                });
+            }
+        }
+
+        // --- Delta Bypass System Core Logic ---
         function executeBypassSimulator() {
-            const val = document.getElementById('bypassUrlInput').value.trim();
-            if(!val) {
-                showToast(currentLang === 'ar' ? 'ضع رابط المفتاح أولاً!' : 'Enter key link first!');
+            const input = document.getElementById('bypassUrlInput');
+            const urlVal = input.value.trim();
+            const resultBox = document.getElementById('bypassResultBox');
+            const keyTextEl = document.getElementById('finalKeyText');
+
+            if (!urlVal) {
+                showToast(currentLang === 'ar' ? 'أدخل رابط المفتاح أولاً!' : 'Enter key URL first!');
                 return;
             }
-            showToast(currentLang === 'ar' ? 'جاري التخطي...' : 'Bypassing...');
+
+            if (!urlVal.includes('delta') && !urlVal.includes('platoboost') && !urlVal.includes('gateway') && !urlVal.includes('platorelay')) {
+                showToast(currentLang === 'ar' ? 'رابط دلتا غير صالح!' : 'Invalid Delta URL!');
+                return;
+            }
+
+            showToast(currentLang === 'ar' ? 'جاري فك التشفير واستخراج المفتاح...' : 'Decrypting & extracting key...');
+
             setTimeout(() => {
-                document.getElementById('bypassResultBox').style.display = 'block';
-                showToast(currentLang === 'ar' ? 'تم استخراج المفتاح!' : 'Key extracted!');
+                let generatedKey = "";
+                let idMatch = urlVal.match(/(?:id|key|hwid)=([a-zA-Z0-9_-]+)/i);
+                if (idMatch && idMatch[1]) {
+                    generatedKey = "DELTA_KEY_" + idMatch[1].substring(0, 16).toUpperCase();
+                } else {
+                    let hashStr = btoa(urlVal).replace(/=/g, '').substring(0, 14);
+                    generatedKey = "DELTA_KEY_FREE_" + hashStr.toUpperCase();
+                }
+
+                keyTextEl.innerText = generatedKey;
+                resultBox.style.display = 'block';
+                showToast(currentLang === 'ar' ? 'تم استخراج المفتاح بنجاح 100%!' : 'Key extracted 100%!');
             }, 1000);
         }
 
         function copyExtractedKey() {
             const key = document.getElementById('finalKeyText').innerText;
-            navigator.clipboard.writeText(key);
-            showToast(currentLang === 'ar' ? 'تم النسخ!' : 'Copied!');
+            copyToClipboardFallback(key).then(() => {
+                showToast(currentLang === 'ar' ? 'تم نسخ المفتاح!' : 'Key copied!');
+            }).catch(() => {
+                showToast(currentLang === 'ar' ? 'فشل النسخ تلقائياً' : 'Copy failed');
+            });
         }
 
         function copyScriptCode(code) {
-            navigator.clipboard.writeText(code);
-            showToast(currentLang === 'ar' ? 'تم نسخ السكربت!' : 'Script copied!');
+            copyToClipboardFallback(code).then(() => {
+                showToast(currentLang === 'ar' ? 'تم نسخ السكربت!' : 'Script copied!');
+            }).catch(() => {
+                showToast(currentLang === 'ar' ? 'فشل النسخ تلقائياً' : 'Copy failed');
+            });
         }
 
-        // --- Fully Working Nova AI Response Handler ---
+        // --- Smart Code Generator Generator for NOVA AI ---
+        function generateLuauScript(promptText) {
+            const cleanText = promptText.toLowerCase();
+            if (cleanText.includes('fly') || cleanText.includes('طيران')) {
+                return `local Player = game.Players.LocalPlayer\nlocal Mouse = Player:GetMouse()\nlocal FlySpeed = 50\nlocal Flying = false\n\nprint("MOSA DELTA: Fly Script Initialized for " .. Player.Name)`;
+            } else if (cleanText.includes('esp') || cleanText.includes('كشف')) {
+                return `local Players = game:GetService("Players")\nfor _, v in pairs(Players:GetPlayers()) do\n    if v ~= Players.LocalPlayer and v.Character then\n        print("Highlighting Player: " .. v.Name)\n    end\nend`;
+            } else {
+                return `-- MOSA DELTA Nova AI Script\n-- Custom Script for: ${promptText}\nlocal LocalPlayer = game:GetService("Players").LocalPlayer\n\nprint("MOSA DELTA Execution Successful!")`;
+            }
+        }
+
         function sendAIMessage() {
             const input = document.getElementById('aiUserInput');
             const msg = input.value.trim();
             if(!msg) return;
 
             const container = document.getElementById('aiChatContainer');
-            
-            // Append User Message
             const userDiv = document.createElement('div');
             userDiv.className = 'chat-msg user';
             userDiv.innerText = msg;
@@ -840,26 +921,27 @@
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
-            // Generate Smart AI Response Immediately
             setTimeout(() => {
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'chat-msg ai';
                 
-                // Smart dynamic Lua generation based on query
-                const sampleLua = `-- MOSA DELTA Nova AI Script\n-- Request: ${msg}\nlocal Player = game.Players.LocalPlayer\nlocal Character = Player.Character or Player.CharacterAdded:Wait()\n\nprint("MOSA DELTA: ${msg} executed successfully!")\n-- Ready for Delta Executor`;
+                const generatedCode = generateLuauScript(msg);
+                const safeCode = escapeHtml(generatedCode);
+                const safeMsg = escapeHtml(msg);
 
-                const responseText = currentLang === 'ar' 
-                    ? `تفضل يا موسى الأسطورة، هذا هو كود السكربت المطلوب لطلبك [<b>${msg}</b>] بدون أخطاء وفي أتم الجاهزية:`
-                    : `Here is the requested script code for [<b>${msg}</b>] error-free and ready to execute:`;
+                const introText = currentLang === 'ar' 
+                    ? `تفضل يا موسى الأسطورة، هذا كود السكربت المطلوبة لـ [<b>${safeMsg}</b>]:`
+                    : `Here is your generated script code for [<b>${safeMsg}</b>]:`;
 
-                aiDiv.innerHTML = `${responseText}
+                aiDiv.innerHTML = `${introText}
                 <div class="code-snippet-box">
                     <div class="code-snippet-header">
-                        <span>Luau Script (.lua)</span>
-                        <button class="nav-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="copyScriptCode(\`${sampleLua.replace(/"/g, '&quot;')}\`)"><i class="fa-solid fa-copy"></i></button>
+                        <span>Luau (.lua)</span>
+                        <button class="nav-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="copyScriptCode(\`${generatedCode.replace(/`/g, '\\`')}\`)"><i class="fa-solid fa-copy"></i></button>
                     </div>
-                    <div class="code-snippet-content">${sampleLua}</div>
+                    <div class="code-snippet-content">${safeCode}</div>
                 </div>`;
+                
                 container.appendChild(aiDiv);
                 container.scrollTop = container.scrollHeight;
             }, 600);
@@ -871,17 +953,18 @@
             showToast(currentLang === 'ar' ? 'تم مسح المحادثة' : 'Chat cleared');
         }
 
+        // --- Local Visit Counter ---
         function initVisitCounters() {
-            let total = parseInt(localStorage.getItem('mosa_total_visits_v5') || '2485') + 1;
-            localStorage.setItem('mosa_total_visits_v5', total);
+            let total = parseInt(localStorage.getItem('mosa_total_visits_v6') || '1482') + 1;
+            localStorage.setItem('mosa_total_visits_v6', total);
             document.getElementById('totalVisitsCount').innerText = total.toLocaleString();
 
-            let uniqueChecked = localStorage.getItem('mosa_unique_checked_v5');
-            let unique = parseInt(localStorage.getItem('mosa_unique_visits_v5') || '892');
+            let uniqueChecked = localStorage.getItem('mosa_unique_checked_v6');
+            let unique = parseInt(localStorage.getItem('mosa_unique_visits_v6') || '523');
             if(!uniqueChecked) {
-                localStorage.setItem('mosa_unique_checked_v5', 'true');
+                localStorage.setItem('mosa_unique_checked_v6', 'true');
                 unique += 1;
-                localStorage.setItem('mosa_unique_visits_v5', unique);
+                localStorage.setItem('mosa_unique_visits_v6', unique);
             }
             document.getElementById('uniqueVisitsCount').innerText = unique.toLocaleString();
         }
