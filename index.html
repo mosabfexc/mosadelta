@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSA DELTA | Ultimate Script Platform</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-deep: #03050c;
+            --bg-primary: #080c1d;
+            --bg-card: rgba(14, 19, 38, 0.88);
+            --bg-card-hover: rgba(22, 30, 58, 0.95);
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-purple: #9d4eff;
+            --accent-pink: #ff007f;
+            --text-main: #ffffff;
+            --text-muted: #a0aec0;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Dynamic Animated Space Background --- */
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 30%, #110d2b 0%, #03050c 70%),
+                        linear-gradient(135deg, rgba(157, 78, 255, 0.12) 0%, rgba(0, 242, 254, 0.12) 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 6px var(--accent-cyan)); }
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(3, 5, 12, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 24px;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-logo i {
+            color: var(--accent-cyan);
+            filter: drop-shadow(0 0 12px var(--accent-cyan));
+            font-size: 1.6rem;
+        }
+
+        .brand-logo span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .global-nav {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 5px;
+            border-radius: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 9px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+        .nav-btn.active {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(157, 78, 255, 0.2));
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .vip-pill {
+            background: linear-gradient(135deg, #fce000, #ff8c00);
+            color: #000;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 15px rgba(252, 224, 0, 0.4);
+        }
+
+        .lang-switch-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .lang-switch-btn:hover { background: var(--accent-cyan); color: #000; }
+
+        /* --- Main Layout --- */
+        main {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeInSection 0.4s ease-out;
+        }
+        .section.active { display: block; }
+
+        @keyframes fadeInSection {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Hero Banner --- */
+        .hero-banner {
+            text-align: center;
+            padding: 55px 20px;
+            background: linear-gradient(135deg, rgba(14, 19, 38, 0.75), rgba(8, 12, 29, 0.95));
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 20%, var(--accent-cyan) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.5));
+            margin-bottom: 15px;
+        }
+
+        .section-header-title {
+            font-size: 1.1rem;
+            color: var(--accent-purple);
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-right: 4px solid var(--accent-purple);
+            padding-right: 12px;
+        }
+        [dir="ltr"] .section-header-title {
+            border-right: none;
+            border-left: 4px solid var(--accent-purple);
+            padding-right: 0;
+            padding-left: 12px;
+        }
+
+        /* --- Cards Grid System --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .cyber-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 15px 35px -10px rgba(0, 242, 254, 0.35);
+            background: var(--bg-card-hover);
+        }
+
+        .cyber-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            margin-bottom: 18px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .cyber-card-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .cyber-card-desc {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .cyber-card:hover .card-action-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+        }
+
+        /* --- Delta Bypass Box --- */
+        .bypass-wrapper {
+            max-width: 650px;
+            margin: 20px auto;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .bypass-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px dashed var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            animation: bypassSpin 12s linear infinite;
+        }
+
+        @keyframes bypassSpin { 100% { transform: rotate(360deg); } }
+
+        .input-group-custom {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            padding: 8px;
+            display: flex;
+            gap: 10px;
+            margin: 24px 0;
+        }
+
+        .input-group-custom input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px;
+            color: #fff;
+            outline: none;
+            font-size: 1rem;
+            direction: ltr;
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+            transition: 0.3s;
+        }
+        .btn-main:hover { transform: scale(0.99); opacity: 0.9; }
+
+        /* --- Nova AI Chat Container --- */
+        .ai-box {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 720px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .ai-topbar {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .chat-msg.user {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(157,78,255,0.2), rgba(74,0,224,0.3));
+            border: 1px solid rgba(157,78,255,0.4);
+            color: #f0e6ff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-msg.ai {
+            align-self: flex-end;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border-bottom-left-radius: 4px;
+        }
+
+        .code-snippet-box {
+            background: #020408;
+            border: 1px solid var(--accent-cyan);
+            border-radius: 10px;
+            margin-top: 12px;
+            overflow: hidden;
+            direction: ltr;
+        }
+
+        .code-snippet-header {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-snippet-content {
+            padding: 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        .ai-bottom-bar {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            gap: 12px;
+        }
+
+        .ai-bottom-bar input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            color: #fff;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        /* --- Footer & Stats --- */
+        footer {
+            margin-top: auto;
+            background: var(--bg-deep);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .statistics-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.03);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-badge b { color: var(--accent-cyan); font-weight: 900; }
+
+        /* Toast notification */
+        .toast-alert {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: var(--accent-cyan);
+            color: #000;
+            padding: 14px 28px;
+            border-radius: 35px;
+            font-weight: 900;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.5);
+        }
+        .toast-alert.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 768px) {
+            .global-nav { display: none; }
+            .hero-title { font-size: 2.3rem; }
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Space Background Stars -->
+    <div class="space-bg" id="spaceBg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a class="brand-logo" onclick="switchTab('home')">
+                <i class="fa-solid fa-bolt"></i>
+                <span>MOSA DELTA</span>
+            </a>
+
+            <nav class="global-nav">
+                <button class="nav-btn active" data-nav="home" onclick="switchTab('home')"><i class="fa-solid fa-home"></i> <span data-i18n="nav_home">الرئيسية</span></button>
+                <button class="nav-btn" data-nav="bypass" onclick="switchTab('bypass')"><i class="fa-solid fa-key"></i> <span data-i18n="nav_bypass">التخطي</span></button>
+                <button class="nav-btn" data-nav="ai" onclick="switchTab('ai')"><i class="fa-solid fa-robot"></i> NOVA AI</button>
+                <button class="nav-btn" data-nav="scripts" onclick="switchTab('scripts')"><i class="fa-solid fa-code"></i> <span data-i18n="nav_scripts">السكربتات</span></button>
+            </nav>
+
+            <div class="header-actions">
+                <div class="vip-pill"><i class="fa-solid fa-crown"></i> VIP</div>
+                <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Home View -->
+        <section id="home" class="section active">
+            <div class="hero-banner">
+                <div class="section-header-title"><i class="fa-solid fa-circle" style="font-size:0.5rem;"></i> <span data-i18n="hero_badge">منصة سكربتات ROBLOX الاحترافية</span></div>
+                <h1 class="hero-title">MOSA DELTA</h1>
+                <p style="color:var(--text-muted); font-size:1.05rem; max-width:700px; margin:0 auto; line-height:1.7;" data-i18n="hero_desc">الأداة العربية الأقوى لتخطي مفاتيح دلتا، توليد السكربتات بواسطة الذكاء الاصطناعي NOVA، ومكتبة السكربتات الخالية من الإعلانات.</p>
+            </div>
+
+            <div class="section-header-title" style="margin-top:10px;"><i class="fa-solid fa-layer-group"></i> <span data-i18n="tools_title">الأدوات والأساسيات</span></div>
+            <div class="grid-layout">
+                <div class="cyber-card" onclick="switchTab('bypass')">
+                    <div>
+                        <div class="cyber-card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3 class="cyber-card-title" data-i18n="card1_title">تخطي مفتاح Delta</h3>
+                        <p class="cyber-card-desc" data-i18n="card1_desc">أدخل رابط المفتاح واستخرج كود التفعيل فوراً بلمح البصر وبدون إعلانات مزعجة.</p>
+                    </div>
+                    <button class="card-action-btn"><span data-i18n="btn_bypass">ابداء التخطي الان</span> <i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+
+                <div class="cyber-card" onclick="switchTab('ai')">
+                    <div>
+                        <div class="cyber-card-icon" style="color:var(--accent-purple); background:rgba(157,78,255,0.1);"><i class="fa-solid fa-robot"></i></div>
+                        <h3 class="cyber-card-title" data-i18n="card2_title">مساعد NOVA AI</h3>
+                        <p class="cyber-card-desc" data-i18n="card2_desc">مبرمج ذكي متطور لتوليد أحدث أكواد Luau وروبلوكس للـ Mobile Executors بدقة عالية.</p>
+                    </div>
+                    <button class="card-action-btn"><span data-i18n="btn_ai">فتح المساعد الذكي</span> <i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+
+                <div class="cyber-card" onclick="switchTab('scripts')">
+                    <div>
+                        <div class="cyber-card-icon" style="color:var(--accent-pink); background:rgba(255,0,127,0.1);"><i class="fa-solid fa-code"></i></div>
+                        <h3 class="cyber-card-title" data-i18n="card3_title">مجتمع السكربتات</h3>
+                        <p class="cyber-card-desc" data-i18n="card3_desc">تصفح أضخم مكتبة سكربتات موثوقة ومفحوصة لأشهر مابات روبلوكس (Blox Fruits, MM2, Rivals).</p>
+                    </div>
+                    <button class="card-action-btn"><span data-i18n="btn_scripts">استكشف المكتبة</span> <i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+
+                <div class="cyber-card">
+                    <div>
+                        <div class="cyber-card-icon" style="color:#5865F2; background:rgba(88,101,242,0.1);"><i class="fa-brands fa-discord"></i></div>
+                        <h3 class="cyber-card-title" data-i18n="card4_title">سيرفر الديسكورد</h3>
+                        <p class="cyber-card-desc" data-i18n="card4_desc">انضم إلى مجتمع المطورين واللاعبين لتشاركونا أحدث الإضافات والسكربتات الحصرية.</p>
+                    </div>
+                    <button class="card-action-btn"><span data-i18n="btn_discord">انضم للديسكورد</span> <i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bypass View -->
+        <section id="bypass" class="section">
+            <div class="bypass-wrapper">
+                <div class="bypass-circle"><i class="fa-solid fa-key"></i></div>
+                <h2 style="font-size:1.8rem; font-weight:900; margin-bottom:8px;" data-i18n="bypass_heading">تخطي مفتاح Delta التلقائي</h2>
+                <p style="color:var(--text-muted); font-size:0.95rem;" data-i18n="bypass_sub">ضع رابط Delta Keysystem أدناه واستخرج المفتاح فوراً</p>
+
+                <div class="input-group-custom">
+                    <input type="text" id="bypassUrlInput" placeholder="https://auth.platorelay.com/..." dir="ltr">
+                    <button class="btn-main" style="width:auto; padding:0 20px; font-size:0.9rem;" onclick="pasteToBypass()"><i class="fa-solid fa-paste"></i> <span data-i18n="paste_btn">لصق</span></button>
+                </div>
+
+                <button class="btn-main" onclick="executeBypassSimulator()"><i class="fa-solid fa-bolt"></i> <span data-i18n="extract_btn">استخراج المفتاح الآن</span></button>
+
+                <div id="bypassResultBox" style="margin-top:25px; padding:20px; background:rgba(0,0,0,0.5); border-radius:12px; border:1px dashed var(--accent-cyan); display:none;">
+                    <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;" data-i18n="key_ready_text">مفتاحك الجاهز للاستعمال:</div>
+                    <div id="finalKeyText" style="font-family:'Fira Code',monospace; color:var(--accent-cyan); font-size:1.1rem; word-break:break-all; margin-bottom:14px;">FREE_KEY_MOSA_DELTA_9982</div>
+                    <button class="btn-main" style="padding:12px;" onclick="copyExtractedKey()"><i class="fa-solid fa-copy"></i> <span data-i18n="copy_key_btn">نسخ المفتاح للحافظة</span></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nova AI View -->
+        <section id="ai" class="section">
+            <div class="ai-box">
+                <div class="ai-topbar">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <i class="fa-solid fa-robot" style="color:var(--accent-purple); font-size:1.4rem;"></i>
+                        <span style="font-weight:900; font-size:1.1rem;">NOVA AI - <span data-i18n="ai_subtitle">المساعد البرمجي الفائق</span></span>
+                    </div>
+                    <button class="btn-main" style="width:auto; padding:8px 16px; font-size:0.85rem;" onclick="clearAIChat()"><i class="fa-solid fa-rotate"></i> <span data-i18n="new_chat_btn">محادثة جديدة</span></button>
+                </div>
+
+                <div class="ai-chat-body" id="aiChatContainer">
+                    <div class="chat-msg ai" data-i18n="ai_welcome">
+                        هلا يا موسى الأسطورة! 👋 أنا **NOVA AI** المبرمج الخاص بك. اطلب مني أي سكربت روبلوكس (طيران، ESP، التجميع التلقائي، واجهات UI) وسأقوم بتصميم الكود لك فوراً بدون أخطاء!
+                    </div>
+                </div>
+
+                <div class="ai-bottom-bar">
+                    <input type="text" id="aiUserInput" placeholder="اطلب سكربت (مثال: اصنع لي سكربت Fly)..." data-i18n-placeholder="ai_placeholder" onkeydown="if(event.key==='Enter') sendAIMessage()">
+                    <button class="btn-main" style="width:auto; padding:0 24px;" onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scripts Hub View -->
+        <section id="scripts" class="section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="font-size:1.5rem; font-weight:900;"><i class="fa-solid fa-code" style="color:var(--accent-cyan)"></i> <span data-i18n="scripts_hub_title">مكتبة السكربتات الموثوقة</span></h2>
+                <button class="btn-main" style="width:auto; padding:10px 20px; font-size:0.9rem;"><i class="fa-solid fa-plus"></i> <span data-i18n="publish_script_btn">نشر سكربت جديد</span></button>
+            </div>
+
+            <div class="grid-layout">
+                <div class="cyber-card">
+                    <div>
+                        <span style="background:rgba(0,242,254,0.15); color:var(--accent-cyan); padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800;" data-i18n="tag_nokey">بدون مفتاح</span>
+                        <h3 class="cyber-card-title" style="margin-top:12px;">Infinite Yield FE</h3>
+                        <p class="cyber-card-desc" data-i18n="script1_desc">سكربت الأدوات الإدارية الأقوى للتحكم الكامل في شخصيتك وبيئة اللعبة.</p>
+                    </div>
+                    <button class="card-action-btn" onclick="copyScriptCode('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/edgeiy/infiniteyield/master/source\'))()')"><i class="fa-solid fa-copy"></i> <span data-i18n="copy_script_btn">نسخ السكربت</span></button>
+                </div>
+
+                <div class="cyber-card">
+                    <div>
+                        <span style="background:rgba(255,0,127,0.15); color:var(--accent-pink); padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800;" data-i18n="tag_key">بمفتاح دلتا</span>
+                        <h3 class="cyber-card-title" style="margin-top:12px;">MM2 Silent Aim GUI</h3>
+                        <p class="cyber-card-desc" data-i18n="script2_desc">كشف الأماكن والتصويب التلقائي الاحترافي في لعبة Murder Mystery 2.</p>
+                    </div>
+                    <button class="card-action-btn" onclick="copyScriptCode('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/MOSADELTA/MM2/main/script.lua\'))()')"><i class="fa-solid fa-copy"></i> <span data-i18n="copy_script_btn">نسخ السكربت</span></button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="statistics-bar">
+            <div class="stat-badge"><i class="fa-solid fa-eye"></i> <span data-i18n="total_visits">إجمالي الزيارات</span>: <b id="totalVisitsCount">2,485</b></div>
+            <div class="stat-badge"><i class="fa-solid fa-users"></i> <span data-i18n="unique_visits">الزوار الفريدون</span>: <b id="uniqueVisitsCount">892</b></div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-muted);"><span data-i18n="footer_rights">جميع الحقوق محفوظة © 2026</span> <b>MOSA DELTA</b></div>
+    </footer>
+
+    <!-- Toast Notification Element -->
+    <div id="toastNotification" class="toast-alert">تمت العملية بنجاح!</div>
+
+    <script>
+        // --- Multi-Language Dictionary ---
+        const translations = {
+            ar: {
+                nav_home: "الرئيسية",
+                nav_bypass: "التخطي",
+                nav_scripts: "السكربتات",
+                hero_badge: "منصة سكربتات ROBLOX الاحترافية",
+                hero_desc: "الأداة العربية الأقوى لتخطي مفاتيح دلتا، توليد السكربتات بواسطة الذكاء الاصطناعي NOVA، ومكتبة السكربتات الخالية من الإعلانات.",
+                tools_title: "الأدوات والأساسيات",
+                card1_title: "تخطي مفتاح Delta",
+                card1_desc: "أدخل رابط المفتاح واستخرج كود التفعيل فوراً بلمح البصر وبدون إعلانات مزعجة.",
+                btn_bypass: "ابداء التخطي الان",
+                card2_title: "مساعد NOVA AI",
+                card2_desc: "مبرمج ذكي متطور لتوليد أحدث أكواد Luau وروبلوكس للـ Mobile Executors بدقة عالية.",
+                btn_ai: "فتح المساعد الذكي",
+                card3_title: "مجتمع السكربتات",
+                card3_desc: "تصفح أضخم مكتبة سكربتات موثوقة ومفحوصة لأشهر مابات روبلوكس (Blox Fruits, MM2, Rivals).",
+                btn_scripts: "استكشف المكتبة",
+                card4_title: "سيرفر الديسكورد",
+                card4_desc: "انضم إلى مجتمع المطورين واللاعبين لتشاركونا أحدث الإضافات والسكربتات الحصرية.",
+                btn_discord: "انضم للديسكورد",
+                bypass_heading: "تخطي مفتاح Delta التلقائي",
+                bypass_sub: "ضع رابط Delta Keysystem أدناه واستخرج المفتاح فوراً",
+                paste_btn: "لصق",
+                extract_btn: "استخراج المفتاح الآن",
+                key_ready_text: "مفتاحك الجاهز للاستعمال:",
+                copy_key_btn: "نسخ المفتاح للحافظة",
+                ai_subtitle: "المساعد البرمجي الفائق",
+                new_chat_btn: "محادثة جديدة",
+                ai_welcome: "هلا يا موسى الأسطورة! 👋 أنا NOVA AI المبرمج الخاص بك. اطلب مني أي سكربت روبلوكس (طيران، ESP، التجميع التلقائي، واجهات UI) وسأقوم بتصميم الكود لك فوراً بدون أخطاء!",
+                ai_placeholder: "اطلب سكربت (مثال: اصنع لي سكربت Fly)...",
+                scripts_hub_title: "مكتبة السكربتات الموثوقة",
+                publish_script_btn: "نشر سكربت جديد",
+                tag_nokey: "بدون مفتاح",
+                tag_key: "بمفتاح دلتا",
+                script1_desc: "سكربت الأدوات الإدارية الأقوى للتحكم الكامل في شخصيتك وبيئة اللعبة.",
+                script2_desc: "كشف الأماكن والتصويب التلقائي الاحترافي في لعبة Murder Mystery 2.",
+                copy_script_btn: "نسخ السكربت",
+                total_visits: "إجمالي الزيارات",
+                unique_visits: "الزوار الفريدون",
+                footer_rights: "جميع الحقوق محفوظة © 2026",
+                toast_success: "تمت العملية بنجاح!"
+            },
+            en: {
+                nav_home: "Home",
+                nav_bypass: "Bypass",
+                nav_scripts: "Scripts",
+                hero_badge: "Professional ROBLOX Script Platform",
+                hero_desc: "The ultimate tool to bypass Delta keys, generate scripts with NOVA AI, and access ad-free script libraries.",
+                tools_title: "Tools & Basics",
+                card1_title: "Delta Key Bypass",
+                card1_desc: "Enter your key link and extract the activation code instantly without annoying ads.",
+                btn_bypass: "Start Bypass",
+                card2_title: "NOVA AI Assistant",
+                card2_desc: "Advanced intelligent programmer to generate the latest Luau & Roblox codes for mobile executors.",
+                btn_ai: "Open AI Assistant",
+                card3_title: "Scripts Hub",
+                card3_desc: "Browse the largest trusted and verified script library for popular Roblox maps (Blox Fruits, MM2, Rivals).",
+                btn_scripts: "Explore Hub",
+                card4_title: "Discord Server",
+                card4_desc: "Join our developer & player community to share the latest exclusive additions and scripts.",
+                btn_discord: "Join Discord",
+                bypass_heading: "Automatic Delta Key Bypass",
+                bypass_sub: "Paste your Delta Keysystem link below and extract your key instantly",
+                paste_btn: "Paste",
+                extract_btn: "Extract Key Now",
+                key_ready_text: "Your Ready-to-Use Key:",
+                copy_key_btn: "Copy Key to Clipboard",
+                ai_subtitle: "Ultimate Programming Assistant",
+                new_chat_btn: "New Chat",
+                ai_welcome: "Hello Mosa Legend! 👋 I am NOVA AI, your personal programmer. Ask me for any Roblox script (Fly, ESP, Auto Farm, UI frameworks) and I will code it for you instantly error-free!",
+                ai_placeholder: "Request a script (e.g., make me a Fly script)...",
+                scripts_hub_title: "Trusted Scripts Library",
+                publish_script_btn: "Publish New Script",
+                tag_nokey: "No Key",
+                tag_key: "Delta Key",
+                script1_desc: "The most powerful admin commands script for full control over your character and game environment.",
+                script2_desc: "ESP and professional Silent Aim in Murder Mystery 2.",
+                copy_script_btn: "Copy Script",
+                total_visits: "Total Visits",
+                unique_visits: "Unique Visitors",
+                footer_rights: "All Rights Reserved © 2026",
+                toast_success: "Operation Successful!"
+            }
+        };
+
+        let currentLang = 'ar';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const htmlRoot = document.getElementById('htmlRoot');
+            const langBtn = document.getElementById('langBtn');
+
+            if (currentLang === 'en') {
+                htmlRoot.setAttribute('dir', 'ltr');
+                htmlRoot.setAttribute('lang', 'en');
+                langBtn.innerText = 'AR';
+            } else {
+                htmlRoot.setAttribute('dir', 'rtl');
+                htmlRoot.setAttribute('lang', 'ar');
+                langBtn.innerText = 'EN';
+            }
+
+            // Update all text elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[currentLang][key]) {
+                    el.setAttribute('placeholder', translations[currentLang][key]);
+                }
+            });
+
+            showToast(currentLang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language switched to English');
+        }
+
+        // --- Generate Dynamic Background Stars ---
+        function createStars() {
+            const bg = document.getElementById('spaceBg');
+            const count = 75;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                bg.appendChild(star);
+            }
+        }
+
+        // --- Navigation Tab Switching ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.global-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSec = document.getElementById(tabId);
+            if (targetSec) targetSec.classList.add('active');
+
+            const targetBtn = document.querySelector(`.global-nav .nav-btn[data-nav="${tabId}"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Toast Notification ---
+        function showToast(text) {
+            const toast = document.getElementById('toastNotification');
+            toast.innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // --- Bypass Functions ---
+        async function pasteToBypass() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('bypassUrlInput').value = text;
+                showToast(currentLang === 'ar' ? 'تم اللصق من الحافظة بنجاح!' : 'Pasted from clipboard!');
+            } catch (err) {
+                showToast(currentLang === 'ar' ? 'يرجى كتابة الرابط يدوياً' : 'Please type the link manually');
+            }
+        }
+
+        function executeBypassSimulator() {
+            const val = document.getElementById('bypassUrlInput').value.trim();
+            if(!val) {
+                showToast(currentLang === 'ar' ? 'يرجى وضع رابط المفتاح أولاً!' : 'Please enter the key link first!');
+                return;
+            }
+            showToast(currentLang === 'ar' ? 'جاري الاتصال بسيرفرات دلتا وتخطي الحماية...' : 'Connecting to Delta servers & bypassing...');
+            setTimeout(() => {
+                document.getElementById('bypassResultBox').style.display = 'block';
+                showToast(currentLang === 'ar' ? 'تم استخراج المفتاح بنجاح تام!' : 'Key successfully extracted!');
+            }, 1500);
+        }
+
+        function copyExtractedKey() {
+            const key = document.getElementById('finalKeyText').innerText;
+            navigator.clipboard.writeText(key);
+            showToast(currentLang === 'ar' ? 'تم نسخ المفتاح للحافظة!' : 'Key copied to clipboard!');
+        }
+
+        function copyScriptCode(code) {
+            navigator.clipboard.writeText(code);
+            showToast(currentLang === 'ar' ? 'تم نسخ كود السكربت بنجاح!' : 'Script code copied successfully!');
+        }
+
+        // --- Nova AI Chat Functionality ---
+        function sendAIMessage() {
+            const input = document.getElementById('aiUserInput');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const container = document.getElementById('aiChatContainer');
+
+            // User Message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-msg user';
+            userDiv.innerText = msg;
+            container.appendChild(userDiv);
+
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // AI Response Simulation
+            setTimeout(() => {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'chat-msg ai';
+                
+                const sampleLua = `-- MOSA DELTA Nova AI Generated Script\nprint("Executing: ${msg}")\nlocal Player = game.Players.LocalPlayer\n-- Secure Hook Loaded for Delta Executor`;
+
+                const responseText = currentLang === 'ar' 
+                    ? `تفضل يا موسى الأسطورة، هذا هو كود السكربت المطلوب لطلبك [<b>${msg}</b>] بدون أخطاء:`
+                    : `Here you go Mosa Legend, this is the script code for your request [<b>${msg}</b>] error-free:`;
+
+                aiDiv.innerHTML = `${responseText}
+                <div class="code-snippet-box">
+                    <div class="code-snippet-header">
+                        <span>Luau Script (.lua)</span>
+                        <button class="nav-btn" style="padding:2px 8px; font-size:0.75rem;" onclick="copyScriptCode(\`${sampleLua}\`)"><i class="fa-solid fa-copy"></i> ${currentLang === 'ar' ? 'نسخ' : 'Copy'}</button>
+                    </div>
+                    <div class="code-snippet-content">${sampleLua}</div>
+                </div>`;
+                container.appendChild(aiDiv);
+                container.scrollTop = container.scrollHeight;
+            }, 1000);
+        }
+
+        function clearAIChat() {
+            const welcomeMsg = translations[currentLang].ai_welcome;
+            document.getElementById('aiChatContainer').innerHTML = `<div class="chat-msg ai">${welcomeMsg}</div>`;
+            showToast(currentLang === 'ar' ? 'تم مسح المحادثة' : 'Chat cleared');
+        }
+
+        // --- Visit Counter ---
+        function initVisitCounters() {
+            let total = parseInt(localStorage.getItem('mosa_total_visits_v3') || '2485') + 1;
+            localStorage.setItem('mosa_total_visits_v3', total);
+            document.getElementById('totalVisitsCount').innerText = total.toLocaleString();
+
+            let uniqueChecked = localStorage.getItem('mosa_unique_checked_v3');
+            let unique = parseInt(localStorage.getItem('mosa_unique_visits_v3') || '892');
+            if(!uniqueChecked) {
+                localStorage.setItem('mosa_unique_checked_v3', 'true');
+                unique += 1;
+                localStorage.setItem('mosa_unique_visits_v3', unique);
+            }
+            document.getElementById('uniqueVisitsCount').innerText = unique.toLocaleString();
+        }
+
+        window.onload = function() {
+            createStars();
+            initVisitCounters();
+        };
+    </script>
+</body>
+</html>
